@@ -1,6 +1,7 @@
 package com.example.Blog.service.impl;
 
 import com.example.Blog.Entity.User;
+import com.example.Blog.Entity.UserLogin;
 import com.example.Blog.repository.UserDao;
 import com.example.Blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,27 +30,32 @@ public class UserServiceImpl implements UserService {
         return userDao.findByUsername(username);
     };
 
+    //註冊
     @Override
-    public String createUser(User user){
-        if(!user.getPassword().equals(user.getCheckPassword())){
+    public String createUser(UserLogin userLogin){
+        if(!userLogin.getPassword().equals(userLogin.getCheckPassword())){
             return "兩次輸入密碼不相符";
         }
 
         //如果查詢結果不為null，代表有重複名稱
-        User username =findByUsername(user.getUsername());
+        User username = findByUsername(userLogin.getUsername());
         if(username != null){
             return "該帳號已被使用";
         }
 
         // 產生鹽值
-        String salt = UUID.randomUUID().toString().replaceAll("-","");;
+        String salt = UUID.randomUUID().toString().replaceAll("-","");
 
         // 密碼加密
-        String md5Password = getMd5Password(user.getPassword(),salt);
+        String md5Password = getMd5Password(userLogin.getPassword(),salt);
 
         // 新增UserEntity資料
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = df.format(new Date());
+        User user = new User();
+        user.setName(userLogin.getName());
+        user.setE_mail(userLogin.getE_mail());
+        user.setUsername(userLogin.getUsername());
         user.setPassword(md5Password);
         user.setSalt(salt);
         user.setCreated_time(date);
@@ -59,4 +65,21 @@ public class UserServiceImpl implements UserService {
 
         return "Success";
     };
+
+    //登入
+    @Override
+    public String login(User user){
+        User userInfo = findByUsername(user.getUsername());
+        if(userInfo == null){
+            return "該帳號尚未註冊";
+        }
+        String salt = userInfo.getSalt();
+        String md5Password = getMd5Password(user.getPassword(),salt);
+
+        if(!userInfo.getPassword().equals(md5Password)){
+            return "密碼錯誤";
+        }
+
+        return "Success";
+    }
 }
