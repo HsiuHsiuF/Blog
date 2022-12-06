@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -18,6 +19,7 @@ public class User {
     private Integer id;
 
     @NotBlank(message = "姓名不可為空")
+    @Column
     private String name;
 
     @Email
@@ -52,4 +54,7 @@ public class User {
 
     @Column
     private String modified_time;
+
+    @OneToMany(mappedBy = "user")
+    private List<Article> articles;
 }
