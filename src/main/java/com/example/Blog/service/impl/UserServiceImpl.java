@@ -10,7 +10,6 @@ import org.springframework.util.DigestUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -82,11 +81,5 @@ public class UserServiceImpl implements UserService {
         }
 
         return "Success";
-    }
-
-    @Override
-    public Optional<User> getArticleByUserId(Integer id) {
-        Optional<User> data = userDao.findById(id);
-        return data;
     }
 }
