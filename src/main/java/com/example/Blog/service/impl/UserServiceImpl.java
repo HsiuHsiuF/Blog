@@ -1,6 +1,7 @@
 package com.example.Blog.service.impl;
 
 import com.example.Blog.Entity.User;
+import com.example.Blog.Entity.UserInfo;
 import com.example.Blog.Entity.UserLogin;
 import com.example.Blog.repository.UserDao;
 import com.example.Blog.service.UserService;
@@ -68,18 +69,48 @@ public class UserServiceImpl implements UserService {
 
     //登入
     @Override
-    public String login(User user){
-        User userInfo = findByUsername(user.getUsername());
-        if(userInfo == null){
-            return "該帳號尚未註冊";
+    public UserInfo login(UserLogin userLogin){
+        User user = findByUsername(userLogin.getUsername());
+        if(user == null){
+            return null;
         }
-        String salt = userInfo.getSalt();
-        String md5Password = getMd5Password(user.getPassword(),salt);
+        String salt = user.getSalt();
+        String md5Password = getMd5Password(userLogin.getPassword(),salt);
 
-        if(!userInfo.getPassword().equals(md5Password)){
-            return "密碼錯誤";
+        if(!user.getPassword().equals(md5Password)){
+            return null;
         }
 
-        return "Success";
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(user.getId());
+        userInfo.setName(user.getName());
+        userInfo.setE_mail(user.getE_mail());
+        userInfo.setUsername(user.getUsername());
+        userInfo.setBirthday(user.getBirthday());
+        userInfo.setPhone(user.getPhone());
+
+        return userInfo;
+    }
+
+    //修改USER資訊
+
+    @Override
+    public UserInfo update(UserInfo userInfo){
+        User user = userDao.findByUsername(userInfo.getUsername());
+        if(user == null){
+            return null;
+        }
+        user.setBirthday(userInfo.getBirthday());
+        user.setPhone(userInfo.getPhone());
+        User result = userDao.save(user);
+        if(result == null){
+            return null;
+        }
+        userInfo.setName(user.getName());
+        userInfo.setE_mail(user.getE_mail());
+        userInfo.setBirthday(user.getBirthday());
+        userInfo.setPhone(user.getPhone());
+
+        return userInfo;
     }
 }

@@ -30,5 +30,4 @@ public class Tag {
     @JoinColumn(name="user_id")
     private User user;
 
-
 }

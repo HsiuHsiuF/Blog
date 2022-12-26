@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -65,7 +66,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
-    private Set<Tag> tagList;
+    private List<Tag> tagList;
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference

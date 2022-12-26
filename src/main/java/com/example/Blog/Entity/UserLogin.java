@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 
@@ -20,7 +21,7 @@ public class UserLogin {
     @Column
     private String e_mail;
 
-    @NotBlank(message = "帳號不可為空")
+    @NotNull(message = "帳號不可為空")
     @Length(min = 6 ,max = 18, message = "帳號長度為6~18")
     @Column
     private String username;

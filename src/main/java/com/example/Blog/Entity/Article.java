@@ -24,6 +24,9 @@ public class Article {
     private String content;
 
     @Column
+    private int islock;
+
+    @Column
     private String password;
 
     @Column
@@ -45,7 +48,7 @@ public class Article {
     @JoinColumn(name="tag_id")
     private Tag tag;
 
-    @OneToMany(mappedBy = "article",fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "article")
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
     private Set<Comment> commentList;
