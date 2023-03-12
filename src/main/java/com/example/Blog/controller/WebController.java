@@ -20,4 +20,19 @@ public class WebController {
     public String showHome() {
         return "home";
     }
+
+    @GetMapping("/blog")
+    public String showblog() {
+        return "blog";
+    }
+
+    @GetMapping("/blogs")
+    public String showblogs() {
+        return "blogs";
+    }
+
+    @GetMapping("/blogsInput")
+    public String showblogsInput() {
+        return "blogs-input";
+    }
 }

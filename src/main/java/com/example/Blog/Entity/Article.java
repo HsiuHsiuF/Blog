@@ -38,13 +38,16 @@ public class Article {
     @Column
     private String modified_time;
 
+    @Column
+    private String username;
+
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name="user_id")
     private User user;
 
     @ManyToOne
-    @JsonBackReference
+//    @JsonBackReference
     @JoinColumn(name="tag_id")
     private Tag tag;
 

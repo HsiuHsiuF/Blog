@@ -1,6 +1,6 @@
 package com.example.Blog.Entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,18 +15,18 @@ public class Comment {
     private Integer comment_id;
 
     @Column
+    private String name;
+    @Column
     private String content;
 
     @Column
     private String created_time;
 
     @ManyToOne
-    @JsonBackReference
+//    @JsonBackReference
+    @JsonIgnore
     @JoinColumn(name="article_id")
     private Article article;
 
-    @ManyToOne
-    @JsonBackReference
-    @JoinColumn(name="user_id")
-    private User user;
+
 }

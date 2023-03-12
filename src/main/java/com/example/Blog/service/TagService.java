@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface TagService {
 
-    public List<Tag> getTagbyUserName(String userName);
+    public List<Tag> getTagbyUserId(Integer userId);
+
+    public Tag getTagbyArticleId(Integer Id);
 }

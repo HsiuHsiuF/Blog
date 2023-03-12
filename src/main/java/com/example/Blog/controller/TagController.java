@@ -18,9 +18,16 @@ public class TagController {
     TagServiceImpl tagServiceimpl;
 
     //取得文章分類
-    @GetMapping("/{userName}/getAllTag")
-    public ResponseEntity getAllTag (@PathVariable("userName") String userName) {
-        List<Tag> tags = tagServiceimpl.getTagbyUserName(userName);
+//    @GetMapping("/getAllTag")
+//    public ResponseEntity getAllTag () {
+//        List<Tag> tags = tagServiceimpl.getTagbyUserId(5);
+//        return ResponseEntity.status(HttpStatus.OK).body(tags);
+//    }
+
+    //取得USER個人分類
+    @GetMapping("/tag/{id}")
+    public ResponseEntity getTagByUserId (@PathVariable Integer id) {
+        List<Tag> tags = tagServiceimpl.getTagbyUserId(id);
         return ResponseEntity.status(HttpStatus.OK).body(tags);
     }
 }

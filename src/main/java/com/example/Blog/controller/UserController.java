@@ -1,5 +1,6 @@
 package com.example.Blog.controller;
 
+import com.example.Blog.Entity.User;
 import com.example.Blog.Entity.UserInfo;
 import com.example.Blog.Entity.UserLogin;
 import com.example.Blog.service.impl.UserServiceImpl;
@@ -73,5 +74,19 @@ public class UserController {
         }
         session.setAttribute("user", result);
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    //請求USER資訊
+    @GetMapping("/userInfo")
+    public ResponseEntity userInfo(){
+        User user = userServiceImpl.findByUsername("aaa");
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(user.getId());
+        userInfo.setName(user.getName());
+        userInfo.setE_mail(user.getE_mail());
+        userInfo.setUsername(user.getUsername());
+        userInfo.setBirthday(user.getBirthday());
+        userInfo.setPhone(user.getPhone());
+        return ResponseEntity.status(HttpStatus.OK).body(userInfo);
     }
 }

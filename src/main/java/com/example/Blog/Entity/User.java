@@ -68,9 +68,5 @@ public class User {
     @EqualsAndHashCode.Exclude
     private List<Tag> tagList;
 
-    @OneToMany(mappedBy = "user")
-    @JsonManagedReference
-    @EqualsAndHashCode.Exclude
-    private Set<Comment> commentList;
 
 }

@@ -1,7 +1,7 @@
 package com.example.Blog.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,7 +21,8 @@ public class Tag {
     private String name;
 
     @OneToMany(mappedBy = "tag")
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Set<Article> articleList;
 

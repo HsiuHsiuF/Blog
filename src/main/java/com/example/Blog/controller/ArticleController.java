@@ -1,16 +1,20 @@
 package com.example.Blog.controller;
 
 import com.example.Blog.Entity.Article;
+import com.example.Blog.Entity.ArticleInput;
+import com.example.Blog.Entity.Tag;
 import com.example.Blog.Entity.UserInfo;
 import com.example.Blog.repository.UserDao;
 import com.example.Blog.service.impl.ArticleServiceImpl;
+import com.example.Blog.service.impl.TagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class  ArticleController {
@@ -21,6 +25,9 @@ public class  ArticleController {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    TagServiceImpl tagServiceImpl;
+
     //查USER的全部文章
     @GetMapping("/article")
     public ResponseEntity getAllArticles (HttpSession session){
@@ -29,13 +36,16 @@ public class  ArticleController {
         return ResponseEntity.status(HttpStatus.OK).body(articles);
     }
 
-//    //沒有鎖密碼的文章
-//    @GetMapping("/{userName}/{id}")
-//    public ResponseEntity getArticles (@PathVariable("id") Integer id,@PathVariable("userName")String userName){
-//        Article article = articleServiceImpl.findArticleById(id,userName);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(article);
-//    }
+    //沒有鎖密碼的文章
+    @GetMapping("/article/{articleId}")
+    public ResponseEntity getArticles (@PathVariable("articleId") Integer id){
+        Article article = articleServiceImpl.findArticleById(id);
+        Tag tag = tagServiceImpl.getTagbyArticleId(id);
+        List list = new ArrayList<>();
+        list.add(article);
+        list.add(tag);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
 //
 //    //有鎖密碼的文章
 //    @PostMapping("/{userName}/{id}")
@@ -46,10 +56,10 @@ public class  ArticleController {
 //    }
 //
 //
-//    //儲存文章
-//    @PostMapping("/{userName}/edit")
-//    public ResponseEntity addArticle( @PathVariable("userName")String userName, @RequestBody Article article, @RequestBody Tag tag){
-//        String result = articleServiceImpl.addArticle(userName,article,tag);
-//        return ResponseEntity.status(HttpStatus.OK).body(result);
-//    }
+    //儲存文章
+    @PostMapping("/article/{tagId}")
+    public ResponseEntity addArticle(@RequestBody ArticleInput articleInput, @PathVariable("tagId") Integer id){
+        String result = articleServiceImpl.addArticle(articleInput,id);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }
