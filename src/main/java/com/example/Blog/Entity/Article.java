@@ -47,7 +47,7 @@ public class Article {
     private User user;
 
     @ManyToOne
-//    @JsonBackReference
+    @JsonBackReference
     @JoinColumn(name="tag_id")
     private Tag tag;
 

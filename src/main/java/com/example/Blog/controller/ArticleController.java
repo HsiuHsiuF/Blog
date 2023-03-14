@@ -40,7 +40,7 @@ public class  ArticleController {
     @GetMapping("/article/{articleId}")
     public ResponseEntity getArticles (@PathVariable("articleId") Integer id){
         Article article = articleServiceImpl.findArticleById(id);
-        Tag tag = tagServiceImpl.getTagbyArticleId(id);
+        Tag tag = tagServiceImpl.getTagByArticleId(id);
         List list = new ArrayList<>();
         list.add(article);
         list.add(tag);

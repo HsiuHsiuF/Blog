@@ -142,13 +142,15 @@
                     $('#artNum').text(res.length);
 
                     //each遍歷
-                    var reAry = res.reverse(); //反轉陣列，讓新文章置頂
+                    var reAry = res.sort(function(a,b){
+                        return b.article_id - a.article_id;
+                    });
                     $.each(reAry, function (index, element) {               
                         //$('')抓取文本
                             $('#article').append(
                             '<div class="ui padded vertical segment m-padded-tb-large" >' +
                             '<div class="ui middle aligned mobile reversed stackable grid" >' +
-                            '<div class="eleven wide column">' +
+                            '<div class="eleven wide column">'+
                             '<h3 class="ui header" ><a href="http://localhost:8080/blog?id=' + element.article_id + '"  target="_blank" class="m-black" >' + element.title + '</a></h3>' +
                             '<p class="m-text" >' + element.content + '</p>' +
                             '<div class="ui grid">' +
@@ -164,6 +166,11 @@
                             '</div>' +
                             '</div>' +
                             '</div>' +
+                            '<div class="row">' +
+                                    '<div class="column">' +
+                                        '<a href="#" class="ui  basic left pointing label m-padded-mini m-text-thin" >柴柴</a>' +
+                                    '</div>' +
+                                '</div>' +
                             '</div>' +
                             '</div>'
                         )
@@ -180,7 +187,7 @@
             });
             //抓取文章分類
             $.ajax({
-                url: "/getAllTag",
+                url: "/tag/5",
                 method: "GET",
                 dataType: "json",
                 success: function (res) {
@@ -188,7 +195,7 @@
                         $('#tag').append(
                             '<a href="#" target="_blank" class="item">' +
                             '<span>' + element.name + '</span>' +
-                            '<div class="ui teal basic left pointing label">' + res[0].articleList.length + '</div>' +
+                            '<div class="ui teal basic left pointing label">' + element.articleList.length + '</div>' +
                             '</a>'
                         )
                     });

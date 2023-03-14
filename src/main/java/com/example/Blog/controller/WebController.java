@@ -21,6 +21,20 @@ public class WebController {
         return "home";
     }
 
+    @GetMapping("/homeTags")
+    public String showHomeTags() {
+        return "homeTags";
+    }
+
+    @GetMapping("/tags")
+    public String showtags() {
+        return "tags";
+    }
+
+    @GetMapping("/tagsInput")
+    public String showtagsInput() {
+        return "tags-input";
+    }
     @GetMapping("/blog")
     public String showblog() {
         return "blog";
@@ -35,4 +49,5 @@ public class WebController {
     public String showblogsInput() {
         return "blogs-input";
     }
+
 }

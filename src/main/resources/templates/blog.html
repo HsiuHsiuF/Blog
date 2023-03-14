@@ -70,7 +70,6 @@
                     <div id="artContent">
                         <!--由AJXA渲染文章標題,內容-->
                     </div>
-
                     <div class="m-padded-lr-responsive" id="artTag">
                         <!--由AJXA渲染文章標籤-->
                     </div>
@@ -100,7 +99,7 @@
                     <div id="comment-form" class="ui form">
                         <input type="hidden" name="blog.id">
                         <input type="hidden" name="parentComment.id" value="-1">
-                        <form id="commentForm">
+
                             <div class="field">
                                 <textarea id="content" placeholder="輸入留言...."></textarea>
                             </div>
@@ -116,7 +115,7 @@
                                             class="edit icon"></i>傳送</button>
                                 </div>
                             </div>
-                        </form>
+
                     </div>
                 </div>
             </div>
@@ -173,7 +172,7 @@
                 method: "GET",
                 dataType: "json",
                 success: function (res) {
-                    $('#artInfo').html(
+                    $('#artInfo').append(
                         '<div class="item">' +
                         '<div class="content"><a href="http://localhost:8080/home" class="header" >' + res[0].username + '</a></div>' +
                         '</div>' +
@@ -182,18 +181,21 @@
                         '</div>'
                     );
 
-                    $('#artContent').html(
+                    $('#artContent').append(
                         '<h2 class="ui center aligned header" >' + res[0].title + '</h2>' +
                         '<br>' +                        
-                        '<p>' + res[0].content + '</p>' +
+                        '<p class="m-text">' + res[0].content + '</p>' +
                         '<br>'
                     );
 
-                    $('#artTag').html(
+                    $('#artTag').append(
                         '<div class="ui basic teal left pointing label" >' + res[1].name + '</div>'
                     );
 
-                    $.each(res[0].commentList, function (index, element) {
+                    var reAry = res[0].commentList.sort(function(a,b){
+                        return a.comment_id - b.comment_id;
+                    });
+                    $.each(reAry, function (index, element) {
                         $('#artComment').append(
                             '<div class="content">' +
                             '<a class="author" >' + element.name + '</a>' +
