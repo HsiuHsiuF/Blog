@@ -5,4 +5,6 @@ import com.example.Blog.Entity.Comment;
 public interface CommentService {
 
     public String addComment(Comment comment, Integer Article_id);
+
+    public boolean deleteComment(Integer commentId);
 }

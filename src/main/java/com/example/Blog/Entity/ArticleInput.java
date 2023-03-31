@@ -8,4 +8,6 @@ public class ArticleInput {
     private String title;
 
     private String content;
+
+    private String content_md;
 }

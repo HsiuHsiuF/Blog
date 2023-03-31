@@ -19,4 +19,15 @@ public class CommentController {
         String result = commentService.addComment(comment, id);
         return ResponseEntity.status(HttpStatus.OK).body(comment);
     }
+
+    //刪除留言
+    @DeleteMapping ("/comment/{commentId}")
+    public ResponseEntity deleteComment(@PathVariable Integer commentId){
+        boolean result = commentService.deleteComment(commentId);
+        if(!result){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("已刪除");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("Success");
+    }
 }

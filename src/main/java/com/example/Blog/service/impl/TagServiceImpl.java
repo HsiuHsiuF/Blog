@@ -65,4 +65,14 @@ public class TagServiceImpl implements TagService {
         tagDao.deleteById(id);
         return true;
     };
+
+    @Override
+    public boolean updateTag(TagInput tagInput, Integer tagId){
+        Tag tag = tagDao.findById(tagId).get();
+        tag.setName(tagInput.getName());
+        Tag result = tagDao.save(tag);
+        if(result == null)return false;
+
+        return true;
+    };
 }

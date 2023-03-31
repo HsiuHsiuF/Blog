@@ -7,47 +7,48 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class WebController {
 
     @GetMapping("/login")
-    public String showLogin() {
-        return "login";
-    }
+    public String showLogin() { return "login"; }
 
     @GetMapping("/register")
-    public String showRegister() {
-        return "register";
-    }
+    public String showRegister() { return "register"; }
 
-    @GetMapping("/home")
+    @GetMapping("/home/{username}")
     public String showHome() {
         return "home";
     }
 
-    @GetMapping("/homeTags")
+    @GetMapping("/homeTags/{username}")
     public String showHomeTags() {
         return "homeTags";
     }
 
-    @GetMapping("/tags")
+    @GetMapping("/tags/{username}")
     public String showtags() {
         return "tags";
     }
 
-    @GetMapping("/tagsInput")
+    @GetMapping("/tagsInput/{username}")
     public String showtagsInput() {
         return "tags-input";
     }
-    @GetMapping("/blog")
+    @GetMapping("/blog/{username}")
     public String showblog() {
         return "blog";
     }
 
-    @GetMapping("/blogs")
+    @GetMapping("/blogs/{username}")
     public String showblogs() {
         return "blogs";
     }
 
-    @GetMapping("/blogsInput")
+    @GetMapping("/blogsInput/{username}")
     public String showblogsInput() {
         return "blogs-input";
+    }
+
+    @GetMapping("/blogsUpdate/{username}")
+    public String showblogsUpdate() {
+        return "blogs-update";
     }
 
 }

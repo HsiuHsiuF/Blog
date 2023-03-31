@@ -24,6 +24,9 @@ public class Article {
     private String content;
 
     @Column
+    private String content_md;
+
+    @Column
     private int islock;
 
     @Column
@@ -47,7 +50,7 @@ public class Article {
     private User user;
 
     @ManyToOne
-    @JsonBackReference
+//    @JsonBackReference
     @JoinColumn(name="tag_id")
     private Tag tag;
 

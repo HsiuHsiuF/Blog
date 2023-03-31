@@ -32,15 +32,14 @@
 
 <nav class="navbar navbar-expand-lg bg-white sticky-top shadow" id="navBar">
   <div class="container">
+    <a class="navbar-brand mb-1" id="home" href="http://localhost:8080/home">HOME</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
-      <div></div>
-      <div>
-        <a href="http://localhost:8080/logout" class="mr-2"><i class="fas fa-user navbar-user"></i>
-        </a>
+    <div  id="navbarNavDropdown">
+      <div id="button">
+        <!--AJAX注入管理按鈕-->
       </div>
     </div>
   </div>
@@ -48,9 +47,9 @@
 <main>
   <div class="ui attached pointing menu">
     <div class="ui container">
-      <div class="right menu">
-        <a href="http://localhost:8080/blogsInput"  class=" item">發布</a>
-        <a href="http://localhost:8080/blogs"  class="teal active item">列表</a>
+      <div class="right menu" >
+        <a id="add" href="http://localhost:8080/blogsInput"  class=" item">發布</a>
+        <a id="blogs" href="http://localhost:8080/blogs"  class="teal active item">列表</a>
       </div>
     </div>
   </div>
@@ -97,22 +96,11 @@
           <tfoot>
           <tr>
             <th colspan="7">
-              <div class="ui mini pagination menu" ><!--th:if="${page.totalPages}>1 如果頁數大於1才顯示 -->
-                <a onclick="page(this)"  class="item" >上一頁</a><!-- th:unless="${page.first}返回一個boolean 如果是第一頁就不顯示 --><!--定義一個JS的page方法 onclick="page(this)點擊時傳遞一個對象-->
-                <a onclick="page(this)"  class="item" >下一頁</a><!--th:unless="${page.last}返回一個boolean 如果是最後一頁就不顯示 --><!-- th:attr 是thymeleaf裡自定義屬性值的語法-->
-              </div>
               <a href="http://localhost:8080/blogsInput"  class="ui mini right floated teal basic button">新增</a>
             </th>
           </tr>
           </tfoot>
         </table>
-
-        <!--消息提示-->
-        <div class="ui success message" >
-          <i class="close icon"></i>
-          <div class="header">提示：</div>
-          <p>操作成功！</p>
-        </div>
 
       </div>
 
@@ -156,46 +144,22 @@
     on : 'hover'
   });
 
-  //消息提示關閉初始化
-  $('.message .close')
-          .on('click', function () {
-            $(this)
-                    .closest('.message')
-                    .transition('fade');
-          });
 
-  $('#clear-btn')
-          .on('click', function() {
-            $('.ui.type.dropdown')
-                    .dropdown('clear')
-            ;
-          })
-  ;
 
-<!--  //點擊分頁時也必續使用loaddata方法-->
-<!--  function page(obj) {-->
-<!--    $("[name='page']").val($(obj).data("page"));-->
-<!--    loaddata();-->
-<!--  }-->
+    const pathname = window.location.pathname.split('/').filter(Boolean);
+    console.log("pathname",pathname);
+    const username = pathname[1];
+    console.log("username",username);
 
-<!--  $("#search-btn").click(function () {-->
-<!--    $("[name='page']").val(0);-->
-<!--    loaddata();-->
-<!--  });-->
-<!--  //動態獲取表格內容-->
-<!--  ///*[[@{/login/blogs/search}]]*/是thymeleaf裡面的請求寫法 可透過/*來獲取請求地址-->
-<!--  function loaddata() {-->
-<!--    $("#table-container").load(/*[[@{/login/blogs/search}]]*/"/login/blogs/search",{-->
-<!--      title : $("[name='title']").val(),-->
-<!--      typeId : $("[name='typeId']").val(),-->
-<!--      recommend : $("[name='recommend']").prop('checked'),-->
-<!--      page : $("[name='page']").val()-->
-<!--    });-->
-<!--  }-->
+        //改HOME網址
+        //attr 方法設置或返回被選元素的屬性值
+        $("#home").attr("href",`http://localhost:8080/home/${username}`);
+        $("#add").attr("href",`http://localhost:8080/blogsInput/${username}`);
+        $("#blogs").attr("href",`http://localhost:8080/blogs/${username}`);
 
   $(document).ready(function () {
     $.ajax({
-      url: "/article",
+      url: `/article/all/${username}`,
       method: "GET",
       dataType: "json",
       success: function (res) {
@@ -205,11 +169,11 @@
             '<tr >' +
             '<td>' + `${index+1}` + '</td>'+
             '<td>' + element.title + '</td>'+
-            '<td>' + element.title + '</td>'+
+            '<td>' + element.tag.name + '</td>'+
             '<td>' + element.modified_time + '</td>'+
             '<td>' +
-            '  <a href="#"  class="ui mini teal basic button"> 编辑 </a>'+
-            '  <a href="#"  class="ui mini red basic button"> 删除 </a>'+
+            '  <a href="http://localhost:8080/blogsUpdate/' + username + '?id=' + element.article_id + '" class="ui mini teal basic button"> 编辑 </a>'+
+            '  <button onclick="deleteArticle(' + element.article_id + ')" class="ui mini red basic button"> 删除 </button>'+
             '</td>'+
           '</tr>'
           );
@@ -229,7 +193,46 @@
         });
       }
     })
+
+
+            //登入登出按鈕
+
+                 $('#button').append(
+                    '<button  class="ui teal basic button" onclick="location.href=\'http://localhost:8080/tags/' + username + '\'">管理分類</button>'+
+                    '<button  class="ui teal basic button" id="logout">登出</button>'
+                    );
+
+
+            $('#logout').click(function () {
+                $.ajax({
+                    url: "/logout",
+                    method: "GET",
+                    success: function (res) {
+                        alert("已登出");
+                        window.location.replace('http://localhost:8080/home/' + username)
+                    },
+                    error: function (err) { console.log("ajaxerr",err) }
+                });
+            });
   });
+
+  function deleteArticle(articleId){
+        if (confirm('確定要刪除嗎?') == true) {
+            $.ajax({
+                url: `/article/${articleId}`,
+                method: "DELETE",
+                success: function (res) {
+                    alert("刪除成功")
+                },
+                error: function (err) {
+                    alert("此文章不存在");
+                },
+                complete: function(jqXHR,textStatus){
+                    location.reload();
+                }
+            });
+        }
+    };
 
 </script>
 

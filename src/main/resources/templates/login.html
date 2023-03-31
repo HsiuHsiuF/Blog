@@ -24,7 +24,46 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
-    <title>FurKid寵物專欄</title>
+
+    <style type="text/css">
+        .ui.form .error.message{
+            display: none;
+        }
+        .ui.form.error .error.message:not(:empty) {
+            display: block;
+        }
+        .ui.error.message{
+            background-color:#FFF6F6;
+            color:#9F3A38;
+        }
+        .ui.message:first-child{
+            margin-top:0;
+        }
+        .ui.message{
+            position:relative;
+            min-height:1em;
+            margin:1em 0;
+            background:#F8F8F9;
+            padding:1em 1.5em;
+            line-height:1.4285em;
+            color:rgba(0,0,0,.87);
+            -webkit-transition:opacity .1s ease,color .1s ease,background .1s ease,box-shadow .1s ease;
+            transition:opacity .1s ease,color .1s ease,background .1s ease,box-shadow .1s ease;
+            border-radius:.28571429rem;
+            box-shadow:0 0 0 1px rgba(34,36,38,.22) inset,0 0 0 0 transparent;
+        }
+        .ui.message .list:not(.ui){
+            text-align:left;
+            padding:0;
+            opacity:.85;
+            list-style-position:inside;
+            margin:.5em 0 0;
+        }
+        .ui.message .list:not(.ui):first-child {
+            margin-top: 0;
+        }
+    </style>
+    <title>登入會員</title>
 </head>
 
 <body>
@@ -32,8 +71,6 @@
 
 <nav class="navbar navbar-expand-lg bg-white sticky-top shadow" id="navBar">
     <div class="container">
-        <a class="navbar-brand mb-1" href="http://localhost:8080/java014_03_FurKids_MVC/"><img
-                src="../images/Logo_07.png" alt="Logo" height="26" /></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -45,32 +82,22 @@
     <br>
     <br>
     <div class="wrapper fadeInDown">
-        <div id="formContent">
-            <!-- Tabs Titles -->
-            <br>
-            <!-- Icon -->
-            <div class="fadeIn first">
-                <img src=../images/Logo-02.png id="icon" alt="User Icon" />
-            </div>
-            <br>
-            <div class="alert alert-danger"></div>
+
+        <div id="formContent" class="ui form">
+            <div class="ui error message" ></div>
 
 
-            <!-- Login Form -->
-            <form class method="post" action="#" >
                 <input type="text" class="fadeIn second" name="username" placeholder="帳號">
                 <input type="password" class="fadeIn third" name="password" placeholder="密碼">
-                <input type="submit" class="fadeIn fourth" value="登入">
-            </form>
+                <input type="submit" class="fadeIn fourth" id="login" value="登入">
+
 
             <!-- 註冊帳號 -->
             <div id="formFooter">
                 <a class="underlineHover" href="register">沒有帳號? 點我註冊</a>
             </div>
-
-
-
         </div>
+
     </div>
 </main>
 
@@ -92,12 +119,81 @@
 <script src="https://kit.fontawesome.com/8e822d04fb.js" crossorigin="anonymous"></script>
 
 <!-- banner effect -->
-<script src="../js/jquery.stellar.js" type="text/javascript"></script>
+<script src="../static/js/jquery.stellar.js" type=“text/javascript></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 
 <!-- JavaScript Plug-in End------------------------------------------------------------->
 
 <!--   <script src="./resources/javascript/blogIndex.js"></script> -->
 
+<script>
+    $('.ui.form').form({
+        fields : {
+            username : {
+                identifier: 'username',
+                rules: [{
+                    type : 'empty',
+                    prompt: '請輸入帳號'
+                },
+                {
+                    type   : 'regExp[/^[A-Za-z0-9]{6,18}$/]',
+                    prompt : '帳號必須為長度6~18英文或數字'
+                }
 
+                ]
+            },
+            password : {
+                identifier: 'password',
+                rules: [{
+                    type : 'empty',
+                    prompt: '請輸入密碼'
+                },
+                {
+                    type   : 'regExp[^(?=.*[0-9])(?=.*[a-z]).{6,18}$]',
+                    prompt : '密碼必須為長度6~18英文加數字'
+                }
+                ]
+            }
+        }
+    });
+
+    $('#login').click(function () {
+        var boo = $('.ui.form').form('validate form');
+            console.log("boo", boo);
+            if (boo) {
+                console.log('校驗成功');
+                postData();
+            } else {
+                console.log('校驗失敗');
+            }
+    });
+
+        //JQUERY的load請求
+        function postData() {
+            let username = $("[name='username']").val();
+            let password = $("[name='password']").val();
+            $.ajax({
+                url: "/login",
+                method: "POST",
+                datatype: 'json',
+                contentType: "application/json",
+                data: JSON.stringify(
+                    {
+                        username : username,
+                        password : password
+                    }),
+                success: function (res) {
+                    window.location.replace('http://localhost:8080/home/' + username)
+                },
+                error: function (err) {
+                    alert("帳號或密碼有誤");
+                    console.log(err);
+                }
+            });
+
+        }
+
+</script>
 </body>
 </html>

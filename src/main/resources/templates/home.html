@@ -32,16 +32,14 @@
 
     <nav class="navbar navbar-expand-lg bg-white sticky-top shadow" id="navBar">
         <div class="container">
-            <a class="navbar-brand mb-1" href="http://localhost:8080/home">HOME</a>
+            <a class="navbar-brand mb-1" id="home" href="http://localhost:8080/home">HOME</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
-                <div>
-                    <a href="http://localhost:8080/logout" src="../login/logout" class="mr-2"><i
-                            class="fas fa-user navbar-user"></i>
-                    </a>
+            <div  id="navbarNavDropdown">
+                <div id="button">
+                    <!--AJAX注入管理按鈕-->
                 </div>
             </div>
         </div>
@@ -131,10 +129,19 @@
 
     <!--   <script src="./resources/javascript/blogIndex.js"></script> -->
     <script>
+    const pathname = window.location.pathname.split('/').filter(Boolean);
+    console.log("pathname",pathname);
+    const username = pathname[1];
+    console.log("username",username);
+
+        //改HOME網址
+        //attr 方法設置或返回被選元素的屬性值
+        $("#home").attr("href",`http://localhost:8080/home/${username}`);
+
         //畫面載入時 撈取文章數量
         $(document).ready(function () {
             $.ajax({
-                url: "/article",
+                url: `/article/all/${username}`,
                 method: "GET",
                 dataType: "json",
                 success: function (res) {
@@ -151,7 +158,7 @@
                             '<div class="ui padded vertical segment m-padded-tb-large" >' +
                             '<div class="ui middle aligned mobile reversed stackable grid" >' +
                             '<div class="eleven wide column">'+
-                            '<h3 class="ui header" ><a href="http://localhost:8080/blog?id=' + element.article_id + '"  target="_blank" class="m-black" >' + element.title + '</a></h3>' +
+                            '<h3 class="ui header" ><a href="http://localhost:8080/blog/' + username + '?id=' + element.article_id + '"  class="m-black" >' + element.title + '</a></h3>' +
                             '<p class="m-text" >' + element.content + '</p>' +
                             '<div class="ui grid">' +
                             '<div class="eleven wide column">' +
@@ -168,17 +175,24 @@
                             '</div>' +
                             '<div class="row">' +
                                     '<div class="column">' +
-                                        '<a href="#" class="ui  basic left pointing label m-padded-mini m-text-thin" >柴柴</a>' +
+                                        '<a href="http://localhost:8080/homeTags/' + username + '?id=' + element.tag.tag_id + '" class="ui  basic left pointing label m-padded-mini m-text-thin" >'+
+                                        element.tag.name+
+                                        '</a>' +
                                     '</div>' +
                                 '</div>' +
                             '</div>' +
                             '</div>'
                         )
 
+
+                    });
+                    //複製一定長度的陣列
+                    var newAry = reAry.slice(0,5);
+                    $.each(newAry, function (index, element) {
                         //最新文章
                         $('#newarticle').append(
                             '<div class="ui segment" >' +
-                            '<a href="http://localhost:8080/blog?id=' + element.article_id + '" target="_blank" class="m-black m-text-thin">' + element.title + '</a>' +
+                            '<a href="http://localhost:8080/blog/' + username + '?id=' + element.article_id + '"  class="m-black m-text-thin">' + element.title + '</a>' +
                             '</div>'
                         )
                     });
@@ -193,9 +207,8 @@
                 success: function (res) {
                     $.each(res, function (index, element) {
                         $('#tag').append(
-                            '<a href="#" target="_blank" class="item">' +
+                            '<a href="http://localhost:8080/homeTags/' + username + '?id=' + element.tag_id + '" class="item">' +
                             '<span>' + element.name + '</span>' +
-                            '<div class="ui teal basic left pointing label">' + element.articleList.length + '</div>' +
                             '</a>'
                         )
                     });
@@ -208,15 +221,45 @@
             });
             //USER資訊載入
             $.ajax({
-                url: "/userInfo",
+                url: `/userInfo/${username}`,
                 method: "GET",
                 dataType: "json",
                 success: function (res) {
                     $('#userTitle').text(res.name + '\'s Blog');
                 },
             });
-        });
 
+            console.log("cookie",document.cookie);
+            //登入登出按鈕
+            if(document.cookie != ""){
+                 $('#button').append(
+                    '<button  class="ui teal basic button" id="logout">登出</button>'
+                    );
+            }else{
+                $('#button').append(
+                    '<button  class="ui teal basic button" onclick="location.href=\'http://localhost:8080/login\'">登入</button>'
+                );
+            }
+
+            if(document.cookie.split('=')[1] == username){
+                 $('#button').append(
+                    '<button  class="ui teal basic button" onclick="location.href=\'http://localhost:8080/blogs/' + username + '\'">管理文章</button>'+
+                    '<button  class="ui teal basic button" onclick="location.href=\'http://localhost:8080/tags/' + username + '\'">管理分類</button>'
+                    );
+            }
+
+            $('#logout').click(function () {
+                $.ajax({
+                    url: "/logout",
+                    method: "GET",
+                    success: function (res) {
+                        alert("已登出");
+                        window.location.replace('http://localhost:8080/home/' + username)
+                    },
+                    error: function (err) { console.log("ajaxerr",err) }
+                });
+            });
+        });
 
 
     </script>

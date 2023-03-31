@@ -39,13 +39,14 @@ public class TagController {
 
     //新增分類
     @PostMapping("/tag")
-    public ResponseEntity addtag(@RequestBody TagInput tagInput){
+    public ResponseEntity addTag(@RequestBody TagInput tagInput){
         String result = tagServiceimpl.addTag(tagInput);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    //刪除分類
     @DeleteMapping ("/tag/{id}")
-    public ResponseEntity deletetag(@PathVariable Integer id){
+    public ResponseEntity deleteTag(@PathVariable Integer id){
         boolean result = tagServiceimpl.deleteTag(id);
         if(!result){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("已刪除");
@@ -54,5 +55,15 @@ public class TagController {
         return ResponseEntity.status(HttpStatus.OK).body("Success");
     }
 
+    //修改分類
+    @PutMapping("/tag/{tagId}")
+    public ResponseEntity updateTag(@RequestBody TagInput tagInput, @PathVariable Integer tagId){
+        boolean result = tagServiceimpl.updateTag(tagInput, tagId);
+        if(!result){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("修改時發生錯誤");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("Success");
+    }
 
 }

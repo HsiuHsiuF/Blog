@@ -16,4 +16,6 @@ public interface TagService {
     public String addTag(TagInput tagInput);
 
     public boolean deleteTag(Integer id);
+
+    public boolean updateTag(TagInput tagInput, Integer tagId);
 }

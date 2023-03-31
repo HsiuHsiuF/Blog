@@ -24,7 +24,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
-    <title>FurKid寵物專欄</title>
+    <title id="userTitle"></title>
 </head>
 
 <body>
@@ -32,15 +32,14 @@
 
 <nav class="navbar navbar-expand-lg bg-white sticky-top shadow" id="navBar">
     <div class="container">
+        <a class="navbar-brand mb-1" id="home" href="http://localhost:8080/home">HOME</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
-            <div></div>
-            <div>
-                <a href="http://localhost:8080/logout"  class="mr-2"><i class="fas fa-user navbar-user"></i>
-                </a>
+        <div  id="navbarNavDropdown">
+            <div id="button">
+                <!--AJAX注入管理按鈕-->
             </div>
         </div>
     </div>
@@ -105,6 +104,15 @@
         $('.m-item').toggleClass('m-mobile-hide');
     });
 
+    const pathname = window.location.pathname.split('/').filter(Boolean);
+    console.log("pathname",pathname);
+    const username = pathname[1];
+    console.log("username",username);
+
+        //改HOME網址
+        //attr 方法設置或返回被選元素的屬性值
+        $("#home").attr("href",`http://localhost:8080/home/${username}`);
+
     const queryString = window.location.search;
     console.log("queryString",queryString);
     const urlParams = new URLSearchParams(queryString);
@@ -113,12 +121,12 @@
 
     $(document).ready(function () {
             $.ajax({
-                url: `/tag/by/${id}`,
+                url: `/article/byTag/${id}`,
                 method: "GET",
                 dataType: "json",
                 success: function (res) {
                     //each遍歷
-                    var reAry = res.articleList;
+                    var reAry = res[0];
                     reAry.sort(function(a,b){
                         return b.article_id - a.article_id;
                     });
@@ -128,7 +136,7 @@
                             '<div class="ui padded vertical segment m-padded-tb-large" >' +
                             '<div class="ui middle aligned mobile reversed stackable grid" >' +
                             '<div class="eleven wide column">'+
-                            '<h3 class="ui header" ><a href="http://localhost:8080/blog?id=' + element.article_id + '"  target="_blank" class="m-black" >' + element.title + '</a></h3>' +
+                            '<h3 class="ui header" ><a href="http://localhost:8080/blog/' + username + '?id=' + element.article_id + '"  target="_blank" class="m-black" >' + element.title + '</a></h3>' +
                             '<p class="m-text" >' + element.content + '</p>' +
                             '<div class="ui grid">' +
                             '<div class="eleven wide column">' +
@@ -147,11 +155,45 @@
                         )
                     });
 
-                    $('#tagName').text(res.name);
+                    $('#tagName').text(res[1].name);
 
-                    $('#artNum').text(res.articleList.length);
+                    $('#artNum').text(res[0].length);
+
+                    $('#userTitle').text(res[1].name);
                 },
                 error: function (err) { console.log(err) },
+            });
+
+
+            console.log("cookie",document.cookie);
+            //登入登出按鈕
+            if(document.cookie != ""){
+                 $('#button').append(
+                    '<button  class="ui teal basic button" id="logout">登出</button>'
+                    );
+            }else{
+                $('#button').append(
+                    '<button  class="ui teal basic button" onclick="location.href=\'http://localhost:8080/login\'">登入</button>'
+                );
+            }
+
+            if(document.cookie.split('=')[1] == username){
+                 $('#button').append(
+                    '<button  class="ui teal basic button" onclick="location.href=\'http://localhost:8080/blogs/' + username + '\'">管理文章</button>'+
+                    '<button  class="ui teal basic button" onclick="location.href=\'http://localhost:8080/tags/' + username + '\'">管理分類</button>'
+                    );
+            }
+
+            $('#logout').click(function () {
+                $.ajax({
+                    url: "/logout",
+                    method: "GET",
+                    success: function (res) {
+                        alert("已登出");
+                        window.location.replace('http://localhost:8080/home/' + username)
+                    },
+                    error: function (err) { console.log("ajaxerr",err) }
+                });
             });
     });
 </script>

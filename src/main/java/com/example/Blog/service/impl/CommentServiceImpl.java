@@ -20,6 +20,7 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     ArticleDao articleDao;
 
+    //新增留言
     @Override
     public String addComment(Comment comment, Integer Article_id){
         Article article = articleDao.findById(Article_id).get();
@@ -31,5 +32,16 @@ public class CommentServiceImpl implements CommentService {
         if(result == null)return"新增留言時發生錯誤";
 
         return"Success";
+    };
+
+    //刪除留言
+    @Override
+    public boolean deleteComment(Integer commentId){
+        boolean result = commentDao.existsById(commentId);
+        if(!result){
+            return false;
+        }
+        commentDao.deleteById(commentId);
+        return true;
     };
 }
