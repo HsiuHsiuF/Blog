@@ -12,7 +12,7 @@ public interface ArticleService {
 
     public Article findArticleById(Integer id,String userName,String password);
 
-    public boolean addArticle(ArticleInput articleInput, Integer id);
+    public boolean addArticle(ArticleInput articleInput, Integer tagId, String username);
 
     public boolean updateArticle(ArticleInput articleInput, Integer articleId, Integer tagId);
 

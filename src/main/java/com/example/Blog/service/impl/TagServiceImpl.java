@@ -25,10 +25,10 @@ public class TagServiceImpl implements TagService {
     UserDao userDao;
 
     @Override
-    public List<Tag> getTagbyUserId(Integer userId){
-
+    public List<Tag> getTagbyUsername(String username){
+        Integer userId = userDao.findByUsername(username).getId();
         List<Tag> tags = tagDao.findByUser_id(userId);
-        //tags.forEach((n) -> n.setArticleList(null));
+
         return tags;
     }
 
@@ -45,8 +45,8 @@ public class TagServiceImpl implements TagService {
     };
 
     @Override
-    public String addTag(TagInput tagInput){
-        User user = userDao.findByUsername("aaa");
+    public String addTag(TagInput tagInput, String username){
+        User user = userDao.findByUsername(username);
         Tag tag = new Tag();
         tag.setName(tagInput.getName());
         tag.setUser(user);

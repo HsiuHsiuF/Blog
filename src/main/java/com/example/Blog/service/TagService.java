@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface TagService {
 
-    public List<Tag> getTagbyUserId(Integer userId);
+    public List<Tag> getTagbyUsername(String username);
 
     public Tag getTagByArticleId(Integer id);
 
     public Tag getTagById(Integer id);
 
-    public String addTag(TagInput tagInput);
+    public String addTag(TagInput tagInput, String username);
 
     public boolean deleteTag(Integer id);
 

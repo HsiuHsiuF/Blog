@@ -104,6 +104,10 @@
 
 <!--   <script src="./resources/javascript/blogIndex.js"></script> -->
 <script>
+    const pathname = window.location.pathname.split('/').filter(Boolean);
+    console.log("pathname",pathname);
+    const username = pathname[1];
+    console.log("username",username);
 
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
@@ -142,7 +146,6 @@
             $.ajax({
                 url: "/tag",
                 method: "POST",
-                datatype: 'json',
                 contentType: "application/json",
                 data: JSON.stringify(
                     {
@@ -150,14 +153,11 @@
                     }),
                 success: function (res) {
                     alert("新增分類成功");
-                    console.log(res)
+                    window.location.replace('http://localhost:8080/tags/' + username)
                 },
                 error: function (err) {
                     alert("新增分類失敗");
                     console.log(err)
-                },
-                complete: function(jqXHR,textStatus){
-                    window.location.replace("http://localhost:8080/tags")
                 }
             });
 
@@ -176,7 +176,7 @@
                     method: "GET",
                     success: function (res) {
                         alert("以登出");
-                        window.location.replace("http://localhost:8080/home")
+                        window.location.replace('http://localhost:8080/home/' + username)
                     },
                 });
             });

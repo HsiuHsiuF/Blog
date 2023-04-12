@@ -96,7 +96,7 @@
           <tfoot>
           <tr>
             <th colspan="7">
-              <a href="http://localhost:8080/blogsInput"  class="ui mini right floated teal basic button">新增</a>
+              <a id="addButton" href="http://localhost:8080/blogsInput"  class="ui mini right floated teal basic button">新增</a>
             </th>
           </tr>
           </tfoot>
@@ -156,6 +156,7 @@
         $("#home").attr("href",`http://localhost:8080/home/${username}`);
         $("#add").attr("href",`http://localhost:8080/blogsInput/${username}`);
         $("#blogs").attr("href",`http://localhost:8080/blogs/${username}`);
+        $("#addButton").attr("href",`http://localhost:8080/blogsInput/${username}`);
 
   $(document).ready(function () {
     $.ajax({
@@ -182,7 +183,7 @@
     })
 
     $.ajax({
-      url: "/tag/5",
+      url: `/tag/${username}`,
       method: "GET",
       dataType: "json",
       success: function (res) {

@@ -74,9 +74,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     //新增文章
     @Override
-    public boolean addArticle(ArticleInput articleInput, Integer id){
-        User user = userDao.findByUsername("aaa");
-        Tag tag = tagDao.findById(id).get();
+    public boolean addArticle(ArticleInput articleInput, Integer tagId, String username){
+        User user = userDao.findByUsername(username);
+        Tag tag = tagDao.findById(tagId).get();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = df.format(new Date());
         Article article = new Article();
@@ -84,7 +84,7 @@ public class ArticleServiceImpl implements ArticleService {
         article.setContent(articleInput.getContent());
         article.setContent_md(articleInput.getContent_md());
         article.setUser(user);
-        article.setUsername(user.getName());
+        article.setUsername(user.getUsername());
         article.setTag(tag);
         article.setCreated_time(date);
         article.setModified_time(date);

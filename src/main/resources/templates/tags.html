@@ -130,7 +130,7 @@
 
     $(document).ready(function () {
         $.ajax({
-        url: "/tag/5",
+        url: `/tag/${username}`,
         method: "GET",
         dataType: "json",
           success: function (res) {
@@ -189,7 +189,7 @@
     };
 
     function updateTag(tagId){
-            let name = window.prompt('請輸入新的名稱','分類');
+            let name = window.prompt('請輸入新的名稱', '分類');
             if (name == ""){
                 alert("請輸入名稱");
             } else if(name != null){
@@ -203,12 +203,10 @@
                     }),
                     success: function (res) {
                         alert("更新成功")
+                        location.reload();
                     },
                     error: function (err) {
                         alert("失敗");
-                    },
-                    complete: function(jqXHR,textStatus){
-                        location.reload();
                     }
                 });
             }

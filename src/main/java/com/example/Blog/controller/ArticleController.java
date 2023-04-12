@@ -3,6 +3,7 @@ package com.example.Blog.controller;
 import com.example.Blog.Entity.Article;
 import com.example.Blog.Entity.ArticleInput;
 import com.example.Blog.Entity.Tag;
+import com.example.Blog.Entity.UserInfo;
 import com.example.Blog.repository.UserDao;
 import com.example.Blog.service.impl.ArticleServiceImpl;
 import com.example.Blog.service.impl.TagServiceImpl;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,8 +58,9 @@ public class  ArticleController {
 //
     //儲存文章
     @PostMapping("/article/{tagId}")
-    public ResponseEntity addArticle(@RequestBody ArticleInput articleInput, @PathVariable("tagId") Integer id){
-        boolean result = articleServiceImpl.addArticle(articleInput,id);
+    public ResponseEntity addArticle(@RequestBody ArticleInput articleInput, @PathVariable("tagId") Integer id, HttpSession session){
+        UserInfo userInfo = (UserInfo) session.getAttribute("user");
+        boolean result = articleServiceImpl.addArticle(articleInput, id, userInfo.getUsername());
         if(!result){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("新增文章時發生錯誤");
         }

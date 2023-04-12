@@ -142,9 +142,14 @@
     }
   });
 
+  const pathname = window.location.pathname.split('/').filter(Boolean);
+  console.log("pathname",pathname);
+  const username = pathname[1];
+  console.log("username",username);
+
   $(document).ready(function () {
     $.ajax({
-      url: "/tag/5",
+      url: `/tag/${username}`,
       method: "GET",
       dataType: "json",
       success: function (res) {

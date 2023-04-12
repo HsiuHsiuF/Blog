@@ -201,7 +201,7 @@
             });
             //抓取文章分類
             $.ajax({
-                url: "/tag/5",
+                url: `/tag/${username}`,
                 method: "GET",
                 dataType: "json",
                 success: function (res) {

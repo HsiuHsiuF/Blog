@@ -144,6 +144,13 @@
     on : 'hover'
   });
 
+  const pathname = window.location.pathname.split('/').filter(Boolean);
+  console.log("pathname",pathname);
+  const username = pathname[1];
+  console.log("username",username);
+
+  $("#add").attr("href",`http://localhost:8080/blogsInput/${username}`);
+  $("#blogs").attr("href",`http://localhost:8080/blogs/${username}`);
 
   $('.ui.form').form({
     fields : {
@@ -202,13 +209,11 @@
                 success: function (res) {
                     alert("新增文章成功");
                     console.log(res)
+                    window.location.replace('http://localhost:8080/blogs/' + username);
                 },
                 error: function (err) {
                     alert("新增文章失敗");
                     console.log(err)
-                },
-                complete: function(jqXHR,textStatus){
-                    window.history.go(-1);
                 }
             });
 
@@ -220,7 +225,7 @@
 
   $(document).ready(function () {
     $.ajax({
-      url: "/tag/5",
+      url: `/tag/${username}`,
       method: "GET",
       dataType: "json",
       success: function (res) {
@@ -249,13 +254,7 @@
             });
   });
 
-  const pathname = window.location.pathname.split('/').filter(Boolean);
-  console.log("pathname",pathname);
-  const username = pathname[1];
-  console.log("username",username);
 
-  $("#add").attr("href",`http://localhost:8080/blogsInput/${username}`);
-  $("#blogs").attr("href",`http://localhost:8080/blogs/${username}`);
 
 </script>
 
