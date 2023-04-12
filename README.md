@@ -4,7 +4,7 @@
 - 主框架：Spring boot
 - 資料庫：MySQL
 - 技術：RESTful API , Session , cookie , ORM
-- 前端：Html , JQuery , Semantic UI 
+- 前端框架：JQuery , Semantic UI 
     
 ## 功能簡述
 - 後端Session驗證會員權限訪問後台管理頁面，前端cookie驗證是否登入
